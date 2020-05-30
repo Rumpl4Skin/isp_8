@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace isp_8
 {
-    delegate void Info(string lastname, string firstname);
+    delegate void Info(string type, string material);
     delegate void End(string lastname);
     public abstract class Furniture
         {
@@ -213,6 +213,11 @@ namespace isp_8
                 middle,
                 big
             }
+
+            delegate void Mess(string message);
+            //Событие:
+            event Mess examPass;
+
             ForOdejda[] data;
             private int Size = 0;
             private string model; //модель
@@ -302,14 +307,14 @@ namespace isp_8
 
         class Program
         {
-        static void Hello(string lastName, string firstName)
+        static void Buy(string type, string model)
         {
-            Console.WriteLine($"Привет, {lastName} {firstName}");
+            Console.WriteLine($"Вы приобрели, {type} {model}");
         }
 
-        static void Bay(string lastName, string firstName)
+        static void Bay(string type, string model)
         {
-            Console.WriteLine($"Пока, {lastName} {firstName}");
+            Console.WriteLine($"До свиданья! Спасибо за покупку, {type} {model}");
         }
 
         static void Main(string[] args)
@@ -337,16 +342,16 @@ namespace isp_8
                 ForOdejda.ShowInfo();
                 Console.WriteLine();
                 Shkaf.HowManyShkafs();
-                Info welcome = Hello;
-            welcome += Bay;
-            welcome(specialist.GetLastName(), specialist.GetFirstName());
-
-            End handler = delegate (string str)
+            try
             {
-                Console.WriteLine("Пока " + str);
-            };
-
-            handler(specialist.GetLastName());
+                Info welcome = Buy;
+                welcome += Bay;
+                welcome(ForOdejda.Type, ForOdejda.Model);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
             Console.ReadLine();
             }
         }
